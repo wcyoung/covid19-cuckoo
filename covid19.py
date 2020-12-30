@@ -17,6 +17,7 @@ class Covid19Spider(scrapy.Spider):
 
         today = datetime.date.today().strftime('%m.%d')
         if date != today:
+            print(f'date: {date}, today: {today}')
             return
 
         if os.path.exists('covid19.json'):
@@ -24,6 +25,7 @@ class Covid19Spider(scrapy.Spider):
                 INFO = json.load(json_file)
             
             if INFO['date'] == today:
+                print(f'INFO["date"]: {INFO["date"]}, today: {today}')
                 return
         
         info = {
