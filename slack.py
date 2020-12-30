@@ -5,7 +5,7 @@ import sys
 from slacker import Slacker
 
 def post_message():
-    with open('test.json', 'r') as json_file:
+    with open('covid19.json', 'r') as json_file:
         INFO = json.load(json_file)
 
     with open('config.json', 'r') as json_file:

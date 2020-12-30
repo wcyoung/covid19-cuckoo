@@ -1,5 +1,6 @@
 import datetime
 import json
+import os
 
 import scrapy
 
@@ -14,9 +15,17 @@ class Covid19Spider(scrapy.Spider):
     def parse(self, response):
         date = response.xpath('//*[@id="content"]/div/h5[1]/span/text()').extract()[0][1:6]
 
-        if date != datetime.date.today().strftime('%m.%d'):
+        today = datetime.date.today().strftime('%m.%d')
+        if date != today:
             return
 
+        if os.path.exists('covid19.json'):
+            with open('covid19.json', 'r') as json_file:
+                INFO = json.load(json_file)
+            
+            if INFO['date'] == today:
+                return
+        
         info = {
             'date': date,
             'total': response.xpath('//*[@id="content"]/div/div[2]/div[1]/ul/li[1]/dl/dd/text()').extract()[0],
@@ -24,7 +33,7 @@ class Covid19Spider(scrapy.Spider):
             'local': response.xpath('//*[@id="content"]/div/div[2]/div[1]/ul/li[2]/dl/dd/ul/li[2]/p/text()').extract()[0],
             'inflow': response.xpath('//*[@id="content"]/div/div[2]/div[1]/ul/li[2]/dl/dd/ul/li[3]/p/text()').extract()[0],
         }
-        with open('test.json', 'w') as json_file:
+        with open('covid19.json', 'w') as json_file:
             json.dump(info, json_file, indent=4)
         
         slack.post_message()
