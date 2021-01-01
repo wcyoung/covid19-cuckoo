@@ -13,9 +13,11 @@ class Covid19Spider(scrapy.Spider):
     start_urls = ['http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1']
 
     def parse(self, response):
-        date = response.xpath('//*[@id="content"]/div/h5[1]/span/text()').extract()[0][1:6]
+        date = response.xpath('//*[@id="content"]/div/h5[1]/span/text()').extract()[0][1:].split('.')
+        date = f'{date[0]}.{date[1]}'
 
-        today = datetime.date.today().strftime('%m.%d')
+        today = datetime.date.today()
+        today = f'{int(today.month)}.{int(today.day)}'
         if date != today:
             print(f'date: {date}, today: {today}')
             return
