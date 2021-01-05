@@ -24,7 +24,7 @@ def post_message():
 *소계*: {INFO["sub_total"]}명
 *국내발생*: {INFO["local"]}명
 *해외유입*: {INFO["inflow"]}명
-*검사중*: {INFO["test_fluctuations"]}명
+*검사중*: {INFO["test"]}명 ({INFO["test_fluctuations"]})
 *사망*: {INFO["death"]}명"""
     attachments = [attachments_dict]
 
