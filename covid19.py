@@ -22,6 +22,24 @@ class Covid19Spider(scrapy.Spider):
             print(f'date: {date}, today: {today}')
             return
         
+        if os.path.exists('covid19.json'):
+            with open('covid19.json', 'r') as json_file:
+                old_json = json.load(json_file)
+            
+            old_test = old_json['test'].replace(',', '')
+        else:
+            old_test = 0
+
+        test = response.xpath('//*[@id="content"]/div/div[4]/table/tbody/tr/td[7]/text()').extract()[0]
+
+        test_fluctuations = int(test.replace(',', '')) - int(old_test)
+        if test_fluctuations > 0:
+            test_fluctuations = f'+{test_fluctuations:,}'
+        elif test_fluctuations < 0:
+            test_fluctuations = f'-{test_fluctuations:,}'
+        else:
+            test_fluctuations = '0'
+
         info = {
             'date': date,
             'total': response.xpath('//*[@id="content"]/div/div[2]/div[1]/ul/li[1]/dl/dd/text()').extract()[0],
@@ -29,6 +47,8 @@ class Covid19Spider(scrapy.Spider):
             'local': response.xpath('//*[@id="content"]/div/div[2]/div[1]/ul/li[2]/dl/dd/ul/li[2]/p/text()').extract()[0],
             'inflow': response.xpath('//*[@id="content"]/div/div[2]/div[1]/ul/li[2]/dl/dd/ul/li[3]/p/text()').extract()[0],
             'death': response.xpath('//*[@id="content"]/div/div[2]/div[4]/ul/li[2]/dl/dd/span/text()').extract()[0][2:],
+            'test': test,
+            'test_fluctuations': test_fluctuations,
         }
         with open('covid19.json', 'w') as json_file:
             json.dump(info, json_file, indent=4)
