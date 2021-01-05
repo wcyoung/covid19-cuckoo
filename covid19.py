@@ -28,6 +28,7 @@ class Covid19Spider(scrapy.Spider):
             'sub_total': response.xpath('//*[@id="content"]/div/div[2]/div[1]/ul/li[2]/dl/dd/ul/li[1]/p/text()').extract()[0][2:],
             'local': response.xpath('//*[@id="content"]/div/div[2]/div[1]/ul/li[2]/dl/dd/ul/li[2]/p/text()').extract()[0],
             'inflow': response.xpath('//*[@id="content"]/div/div[2]/div[1]/ul/li[2]/dl/dd/ul/li[3]/p/text()').extract()[0],
+            'death': response.xpath('//*[@id="content"]/div/div[2]/div[4]/ul/li[2]/dl/dd/span/text()').extract()[0][2:],
         }
         with open('covid19.json', 'w') as json_file:
             json.dump(info, json_file, indent=4)

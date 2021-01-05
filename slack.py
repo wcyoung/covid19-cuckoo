@@ -23,7 +23,8 @@ def post_message():
     attachments_dict['text'] = f"""*누적*: {INFO["total"]}명
 *소계*: {INFO["sub_total"]}명
 *국내발생*: {INFO["local"]}명
-*해외유입*: {INFO["inflow"]}명"""
+*해외유입*: {INFO["inflow"]}명
+*사망*: {INFO["death"]}명"""
     attachments = [attachments_dict]
 
     slack.chat.post_message(channel=CONFIG['channel'], text=None, attachments=attachments, as_user=True)
