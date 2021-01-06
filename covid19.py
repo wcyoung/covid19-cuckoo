@@ -35,10 +35,8 @@ class Covid19Spider(scrapy.Spider):
         test_fluctuations = int(test.replace(',', '')) - int(old_test)
         if test_fluctuations > 0:
             test_fluctuations = f'+{test_fluctuations:,}'
-        elif test_fluctuations < 0:
-            test_fluctuations = f'-{test_fluctuations:,}'
         else:
-            test_fluctuations = '0'
+            test_fluctuations = f'{test_fluctuations:,}'
 
         info = {
             'date': date,
